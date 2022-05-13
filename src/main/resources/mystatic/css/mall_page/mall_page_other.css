@@ -32,7 +32,7 @@
     background-color: white;
     box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.5);
     position: fixed;
-    width: 40%;
+    /* width: 88%; */
     z-index: 20;
     margin-top: 15%;
     margin-left: 19.25%;
@@ -41,7 +41,7 @@
 }
 
 .one_part {
-    width: 45%;
+    /* width: 45%; */
     margin: 2.5%;
     height: auto;
     float: left;
@@ -67,6 +67,7 @@
 
 .one_part .type_goods_list {
     margin-left: 4%;
+    width: 170px;
 }
 
 .one_part .type_goods_list a {
@@ -181,11 +182,13 @@ div.pagination_div {
     float: left;
 }
 
-.pagination_div .pagination_lt, .pagination_div .pagination_gt {
+.pagination_div .pagination_lt,
+.pagination_div .pagination_gt {
     float: left;
 }
 
-.pagination_div .pagination_lt, .pagination_div ul li,
+.pagination_div .pagination_lt,
+.pagination_div ul li,
 .pagination_div .pagination_gt {
     width: 6%;
     height: 36px;
@@ -201,7 +204,8 @@ div.pagination_div {
     box-shadow: 1px 2px 5px rgba(0, 0, 0, 0.3);
 }
 
-.pagination_div .pagination_lt:hover, .pagination_div ul li:hover,
+.pagination_div .pagination_lt:hover,
+.pagination_div ul li:hover,
 .pagination_div .pagination_gt:hover {
     cursor: pointer;
     background-color: slateblue;
