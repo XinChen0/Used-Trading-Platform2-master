@@ -126,7 +126,7 @@ public class HomeController {
         stringBuffer.append(allKinds.getName());
         stringBuffer.append("-");
         stringBuffer.append(classification.getName());
-        stringBuffer.append("-");
+        stringBuffer.append(" ");
         stringBuffer.append(specific.getName());
 //        System.out.println(sort);
         return stringBuffer.toString();
