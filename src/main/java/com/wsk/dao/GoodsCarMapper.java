@@ -18,4 +18,6 @@ public interface GoodsCarMapper {
     int updateByPrimaryKey(GoodsCar record);
 
     List<GoodsCar> selectByUid(int uid);
+
+    int deletByUid(int uid);
 }

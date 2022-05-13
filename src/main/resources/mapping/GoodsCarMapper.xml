@@ -32,6 +32,16 @@
         where uid = #{uid,jdbcType=INTEGER} and display=1 order by id DESC
         limit 12
     </select>
+
+    <delete id="selectByUid" parameterType="java.lang.Integer">
+    delete
+    <include refid="all"/>
+    from
+    <include refid="table"/>
+    where uid = #{uid,jdbcType=INTEGER} and display=1 order by id DESC
+    limit 12
+</delete>
+
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         delete from
         <include refid="table"/>

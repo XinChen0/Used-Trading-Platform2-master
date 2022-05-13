@@ -70,7 +70,7 @@ public class UserController {
     @Resource
     private ShopContextService shopContextService;
 
-    //进入登录界面
+    // 进入登录界面
     @RequestMapping(value = "/login.do", method = RequestMethod.GET)
     public String login(HttpServletRequest request, Model model) {
         String token = TokenProccessor.getInstance().makeToken();
@@ -80,7 +80,7 @@ public class UserController {
         return "page/login_page";
     }
 
-    //退出
+    // 退出
     @RequestMapping(value = "/logout.do")
     public String logout(HttpServletRequest request) {
         try {
@@ -94,10 +94,10 @@ public class UserController {
         return "redirect:/";
     }
 
-    //用户注册,拥有插入数据而已，没什么用的
+    // 用户注册,拥有插入数据而已，没什么用的
     @RequestMapping(value = "/registered.do", method = RequestMethod.POST)
     public String registered(Model model,
-                             @RequestParam String name, @RequestParam String phone, @RequestParam String password) {
+            @RequestParam String name, @RequestParam String phone, @RequestParam String password) {
         UserInformation userInformation = new UserInformation();
         userInformation.setUsername(name);
         userInformation.setPhone(phone);
@@ -122,33 +122,33 @@ public class UserController {
         return "success";
     }
 
-    //用户注册
-//    @RequestMapping(value = "/registered", method = RequestMethod.GET)
-//    public String registered() {
-//        return "registered";
-//    }
+    // 用户注册
+    // @RequestMapping(value = "/registered", method = RequestMethod.GET)
+    // public String registered() {
+    // return "registered";
+    // }
 
-    //验证登录
+    // 验证登录
     @RequestMapping(value = "/login.do", method = RequestMethod.POST)
     public String login(HttpServletRequest request,
-                        @RequestParam String phone, @RequestParam String password, @RequestParam String token) {
+            @RequestParam String phone, @RequestParam String password, @RequestParam String token) {
         String loginToken = (String) request.getSession().getAttribute("token");
         if (StringUtils.getInstance().isNullOrEmpty(phone) || StringUtils.getInstance().isNullOrEmpty(password)) {
             return "redirect:/login.do";
         }
-        //防止重复提交
+        // 防止重复提交
         if (StringUtils.getInstance().isNullOrEmpty(token) || !token.equals(loginToken)) {
             return "redirect:/login.do";
         }
         boolean b = getId(phone, password, request);
-        //失败，不存在该手机号码
+        // 失败，不存在该手机号码
         if (!b) {
             return "redirect:/login.do?msg=不存在该手机号码";
         }
         return "redirect:/";
     }
 
-    //查看用户基本信息
+    // 查看用户基本信息
     @RequestMapping(value = "/personal_info.do")
     public String personalInfo(HttpServletRequest request, Model model) {
         UserInformation userInformation = (UserInformation) request.getSession().getAttribute("userInformation");
@@ -162,26 +162,25 @@ public class UserController {
         return "page/personal/personal_info";
     }
 
-
-    //完善用户基本信息，认证
+    // 完善用户基本信息，认证
     @RequestMapping(value = "/certification.do", method = RequestMethod.POST)
     @ResponseBody
     public Map certification(HttpServletRequest request,
-                             @RequestParam(required = false) String userName,
-                             @RequestParam(required = false) String realName,
-                             @RequestParam(required = false) String clazz, @RequestParam String token,
-                             @RequestParam(required = false) String sno, @RequestParam(required = false) String dormitory,
-                             @RequestParam(required = false) String gender) {
+            @RequestParam(required = false) String userName,
+            @RequestParam(required = false) String realName,
+            @RequestParam(required = false) String clazz, @RequestParam String token,
+            @RequestParam(required = false) String sno, @RequestParam(required = false) String dormitory,
+            @RequestParam(required = false) String gender) {
         UserInformation userInformation = (UserInformation) request.getSession().getAttribute("userInformation");
         Map<String, Integer> map = new HashMap<>();
         map.put("result", 0);
-        //该用户还没有登录
+        // 该用户还没有登录
         if (StringUtils.getInstance().isNullOrEmpty(userInformation)) {
             return map;
         }
         String certificationToken = (String) request.getSession().getAttribute("personalInfoToken");
-        //防止重复提交
-//        boolean b = token.equals(certificationToken);
+        // 防止重复提交
+        // boolean b = token.equals(certificationToken);
         if (StringUtils.getInstance().isNullOrEmpty(certificationToken)) {
             return map;
         } else {
@@ -225,16 +224,16 @@ public class UserController {
         }
         int result = userInformationService.updateByPrimaryKeySelective(userInformation);
         if (result != 1) {
-            //更新失败，认证失败
+            // 更新失败，认证失败
             return map;
         }
-        //认证成功
+        // 认证成功
         request.getSession().setAttribute("userInformation", userInformation);
         map.put("result", 1);
         return map;
     }
 
-    //enter the publishUserWant.do.html,进入求购页面
+    // enter the publishUserWant.do.html,进入求购页面
     @RequestMapping(value = "/require_product.do")
     public String enterPublishUserWant(HttpServletRequest request, Model model) {
         UserInformation userInformation = (UserInformation) request.getSession().getAttribute("userInformation");
@@ -252,10 +251,10 @@ public class UserController {
         return "page/require_product";
     }
 
-    //修改求购商品
+    // 修改求购商品
     @RequestMapping(value = "/modified_require_product.do")
     public String modifiedRequireProduct(HttpServletRequest request, Model model,
-                                         @RequestParam int id) {
+            @RequestParam int id) {
         UserInformation userInformation = (UserInformation) request.getSession().getAttribute("userInformation");
         if (StringUtils.getInstance().isNullOrEmpty(userInformation)) {
             return "redirect:/login.do";
@@ -271,33 +270,33 @@ public class UserController {
         return "page/modified_require_product";
     }
 
-    //publish userWant,发布求购
+    // publish userWant,发布求购
     @RequestMapping(value = "/publishUserWant.do")
-//    @ResponseBody
+    // @ResponseBody
     public String publishUserWant(HttpServletRequest request, Model model,
-                                  @RequestParam String name,
-                                  @RequestParam int sort, @RequestParam int quantity,
-                                  @RequestParam double price, @RequestParam String remark,
-                                  @RequestParam String token) {
-//        Map<String, Integer> map = new HashMap<>();
-        //determine whether the user exits
+            @RequestParam String name,
+            @RequestParam int sort, @RequestParam int quantity,
+            @RequestParam double price, @RequestParam String remark,
+            @RequestParam String token) {
+        // Map<String, Integer> map = new HashMap<>();
+        // determine whether the user exits
         UserInformation userInformation = (UserInformation) request.getSession().getAttribute("userInformation");
         if (StringUtils.getInstance().isNullOrEmpty(userInformation)) {
-            //if the user no exits in the session,
-//            map.put("result", 2);
+            // if the user no exits in the session,
+            // map.put("result", 2);
             return "redirect:/login.do";
         }
         String publishUserWantToke = (String) request.getSession().getAttribute("publishUserWantToken");
         if (StringUtils.getInstance().isNullOrEmpty(publishUserWantToke) || !publishUserWantToke.equals(token)) {
-//            map.put("result", 2);
+            // map.put("result", 2);
             return "redirect:require_product.do?error=3";
         } else {
             request.getSession().removeAttribute("publishUserWantToken");
         }
-//        name = StringUtils.replaceBlank(name);
-//        remark = StringUtils.replaceBlank(remark);
-//        name = StringUtils.getInstance().txtReplace(name);
-//        remark = StringUtils.getInstance().txtReplace(remark);
+        // name = StringUtils.replaceBlank(name);
+        // remark = StringUtils.replaceBlank(remark);
+        // name = StringUtils.getInstance().txtReplace(name);
+        // remark = StringUtils.getInstance().txtReplace(remark);
         try {
             if (name.length() < 1 || remark.length() < 1 || name.length() > 25 || remark.length() > 25) {
                 return "redirect:require_product.do";
@@ -318,20 +317,20 @@ public class UserController {
         try {
             result = userWantService.insertSelective(userWant);
             if (result != 1) {
-//                map.put("result", result);
+                // map.put("result", result);
                 return "redirect:/require_product.do?error=2";
             }
         } catch (Exception e) {
             e.printStackTrace();
-//            map.put("result", result);
+            // map.put("result", result);
             return "redirect:/require_product.do?error=2";
         }
-//        map.put("result", result);
+        // map.put("result", result);
         return "redirect:/my_require_product.do";
     }
 
-    //getUserWant,查看我的求购
-    @RequestMapping(value = {"/my_require_product.do", "/my_require_product_page.do"})
+    // getUserWant,查看我的求购
+    @RequestMapping(value = { "/my_require_product.do", "/my_require_product_page.do" })
     public String getUserWant(HttpServletRequest request, Model model) {
         List<UserWant> list;
         UserInformation userInformation = (UserInformation) request.getSession().getAttribute("userInformation");
@@ -340,7 +339,7 @@ public class UserController {
         }
         try {
             int uid = (int) request.getSession().getAttribute("uid");
-//            list = selectUserWantByUid(4);
+            // list = selectUserWantByUid(4);
             list = selectUserWantByUid(uid);
             List<UserWantBean> userWantBeans = new ArrayList<>();
             for (UserWant userWant : list) {
@@ -364,7 +363,7 @@ public class UserController {
         return "page/personal/my_require_product_page";
     }
 
-    //getUserWantCounts.do,查看求购总数
+    // getUserWantCounts.do,查看求购总数
     @RequestMapping(value = "/getUserWantCounts.do")
     @ResponseBody
     public Map getUserWantCounts(HttpServletRequest request, Model model) {
@@ -383,10 +382,10 @@ public class UserController {
         return map;
     }
 
-    //删除求购
+    // 删除求购
     @RequestMapping(value = "/deleteUserWant.do")
     public String deleteUserWant(HttpServletRequest request, @RequestParam int id) {
-//        Map<String, Integer> map = new HashMap<>();
+        // Map<String, Integer> map = new HashMap<>();
         if (StringUtils.getInstance().isNullOrEmpty(request.getSession().getAttribute("userInformation"))) {
             return "redirect:/login.do";
         }
@@ -404,28 +403,27 @@ public class UserController {
         return "redirect:my_require_product.do";
     }
 
-    //收藏
-    //add the userCollection
+    // 收藏
+    // add the userCollection
     @RequestMapping(value = "/addUserCollection.do")
     @ResponseBody
     public BaseResponse addUserCollection(HttpServletRequest request, @RequestParam int sid) {
-        //determine whether the user exits
+        // determine whether the user exits
         if (StringUtils.getInstance().isNullOrEmpty(request.getSession().getAttribute("userInformation"))) {
-            //if the user no exits in the session,
+            // if the user no exits in the session,
             return BaseResponse.fail();
         }
         UserCollection userCollection = new UserCollection();
         userCollection.setModified(new Date());
         userCollection.setSid(sid);
         userCollection.setUid((Integer) request.getSession().getAttribute("uid"));
-        //begin insert the userCollection
+        // begin insert the userCollection
         int result = userCollectionService.insertSelective(userCollection);
         if (result != 1) {
             return BaseResponse.fail();
         }
         return BaseResponse.success();
     }
-
 
     // delete the userCollection
     @RequestMapping(value = "/deleteUserCollection.do")
@@ -435,8 +433,8 @@ public class UserController {
             return BaseResponse.fail();
         }
         UserCollection userCollection = new UserCollection();
-//        userCollection.setUid((Integer) request.getSession().getAttribute("uid"));
-//        userCollection.setSid(sid);
+        // userCollection.setUid((Integer) request.getSession().getAttribute("uid"));
+        // userCollection.setSid(sid);
         userCollection.setId(ucid);
         userCollection.setModified(new Date());
         userCollection.setDisplay(0);
@@ -448,8 +446,8 @@ public class UserController {
         return BaseResponse.success();
     }
 
-    //购物车开始。。。。。。。。。。。
-    //getShopCarCounts.do
+    // 购物车开始。。。。。。。。。。。
+    // getShopCarCounts.do
     @RequestMapping(value = "/getShopCarCounts.do")
     @ResponseBody
     public BaseResponse getShopCarCounts(HttpServletRequest request) {
@@ -461,14 +459,14 @@ public class UserController {
         return BaseResponse.success();
     }
 
-    //check the shopping cart,查看购物车
+    // check the shopping cart,查看购物车
     @RequestMapping(value = "/shopping_cart.do")
     public String selectShopCar(HttpServletRequest request, Model model) {
         UserInformation userInformation = (UserInformation) request.getSession().getAttribute("userInformation");
         if (StringUtils.getInstance().isNullOrEmpty(userInformation)) {
             userInformation = new UserInformation();
             model.addAttribute("userInformation", userInformation);
-//            list.add(shopCar);
+            // list.add(shopCar);
             return "redirect:/login.do";
         } else {
             model.addAttribute("userInformation", userInformation);
@@ -495,27 +493,29 @@ public class UserController {
         return "page/shopping_cart";
     }
 
-//    //通过购物车的id获取购物车里面的商品
-//    @RequestMapping(value = "/selectGoodsOfShopCar")
-//    @ResponseBody
-//    public List<GoodsCar> selectGoodsCar(HttpServletRequest request) {
-//        List<GoodsCar> list = new ArrayList<>();
-//        GoodsCar goodsCar = new GoodsCar();
-//        if (Empty.isNullOrEmpty(request.getSession().getAttribute("userInformation"))) {
-//            list.add(goodsCar);
-//            return list;
-//        }
-//        try {
-//            int scid = shopCarService.selectByUid((Integer) request.getSession().getAttribute("uid")).getId();
-//            list = goodsCarService.selectByUid(scid);
-//            return list;
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            return list;
-//        }
-//    }
+    // //通过购物车的id获取购物车里面的商品
+    // @RequestMapping(value = "/selectGoodsOfShopCar")
+    // @ResponseBody
+    // public List<GoodsCar> selectGoodsCar(HttpServletRequest request) {
+    // List<GoodsCar> list = new ArrayList<>();
+    // GoodsCar goodsCar = new GoodsCar();
+    // if
+    // (Empty.isNullOrEmpty(request.getSession().getAttribute("userInformation"))) {
+    // list.add(goodsCar);
+    // return list;
+    // }
+    // try {
+    // int scid = shopCarService.selectByUid((Integer)
+    // request.getSession().getAttribute("uid")).getId();
+    // list = goodsCarService.selectByUid(scid);
+    // return list;
+    // } catch (Exception e) {
+    // e.printStackTrace();
+    // return list;
+    // }
+    // }
 
-    //添加到购物车
+    // 添加到购物车
     @RequestMapping(value = "/insertGoodsCar.do")
     @ResponseBody
     public BaseResponse insertGoodsCar(HttpServletRequest request, @RequestParam int id) {
@@ -534,8 +534,7 @@ public class UserController {
         return BaseResponse.success();
     }
 
-
-    //删除购物车的商品
+    // 删除购物车的商品
     @RequestMapping(value = "/deleteShopCar.do")
     @ResponseBody
     public BaseResponse deleteShopCar(HttpServletRequest request, @RequestParam int id, @RequestParam int sid) {
@@ -556,41 +555,62 @@ public class UserController {
         return BaseResponse.success();
     }
 
-    //发布商品
+    // 结算购物车的商品
+    @RequestMapping(value = "/clearShopCar.do")
+    @ResponseBody
+    public BaseResponse clearShopCar(HttpServletRequest request, @RequestParam int id, @RequestParam int sid) {
+        UserInformation userInformation = (UserInformation) request.getSession().getAttribute("userInformation");
+        if (StringUtils.getInstance().isNullOrEmpty(userInformation)) {
+            return BaseResponse.fail();
+        }
+        int uid = userInformation.getId();
+
+//        int result = goodsCarService.updateByPrimaryKeySelective(goodsCar);
+        int result = goodsCarService.deletByUid(uid);
+//        result = goodsCarService.deleteByPrimaryKey(goodsCarService.selectByUid(uid));
+        if (result != 1) {
+            return BaseResponse.fail();
+        }
+        return BaseResponse.success();
+    }
+
+    // 发布商品
     @RequestMapping(value = "/insertGoods.do", method = RequestMethod.POST)
     public String insertGoods(@RequestParam String name, @RequestParam int level,
-                              @RequestParam String remark, @RequestParam double price,
-                              @RequestParam int sort, @RequestParam int quantity,
-                              @RequestParam String token, @RequestParam(required = false) MultipartFile image,
-                              @RequestParam int action, @RequestParam(required = false) int id,
-                              HttpServletRequest request, Model model) {
+            @RequestParam String remark, @RequestParam double price,
+            @RequestParam int sort, @RequestParam int quantity,
+            @RequestParam String token, @RequestParam(required = false) MultipartFile image,
+            @RequestParam int action, @RequestParam(required = false) int id,
+            HttpServletRequest request, Model model) {
         String goodsToken = (String) request.getSession().getAttribute("goodsToken");
-//        String publishProductToken = TokenProccessor.getInstance().makeToken();
-//        request.getSession().setAttribute("token",publishProductToken);
-        //防止重复提交
+        // String publishProductToken = TokenProccessor.getInstance().makeToken();
+        // request.getSession().setAttribute("token",publishProductToken);
+        // 防止重复提交
         if (StringUtils.getInstance().isNullOrEmpty(goodsToken) || !goodsToken.equals(token)) {
             return "redirect:publish_product.do?error=1";
         } else {
             request.getSession().removeAttribute("goodsToken");
         }
-//        //从session中获得用户的基本信息
+        // //从session中获得用户的基本信息
         UserInformation userInformation = (UserInformation) request.getSession().getAttribute("userInformation");
         model.addAttribute("userInformation", userInformation);
         if (StringUtils.getInstance().isNullOrEmpty(userInformation)) {
-            //如果用户不存在，
+            // 如果用户不存在，
             return "redirect:/login.do";
         }
         name = StringUtils.getInstance().replaceBlank(name);
         remark = StringUtils.getInstance().replaceBlank(remark);
-        //judge the data`s format
-        if (StringUtils.getInstance().isNullOrEmpty(name) || StringUtils.getInstance().isNullOrEmpty(level) || StringUtils.getInstance().isNullOrEmpty(remark) || StringUtils.getInstance().isNullOrEmpty(price)
-                || StringUtils.getInstance().isNullOrEmpty(sort) || StringUtils.getInstance().isNullOrEmpty(quantity) || name.length() > 25 || remark.length() > 122) {
+        // judge the data`s format
+        if (StringUtils.getInstance().isNullOrEmpty(name) || StringUtils.getInstance().isNullOrEmpty(level)
+                || StringUtils.getInstance().isNullOrEmpty(remark) || StringUtils.getInstance().isNullOrEmpty(price)
+                || StringUtils.getInstance().isNullOrEmpty(sort) || StringUtils.getInstance().isNullOrEmpty(quantity)
+                || name.length() > 25 || remark.length() > 122) {
             model.addAttribute("message", "请输入正确的格式!!!!!");
             model.addAttribute("token", goodsToken);
             request.getSession().setAttribute("goodsToken", goodsToken);
             return "page/publish_product";
         }
-        //插入
+        // 插入
         if (action == 1) {
             if (StringUtils.getInstance().isNullOrEmpty(image)) {
                 model.addAttribute("message", "请选择图片!!!");
@@ -607,36 +627,38 @@ public class UserController {
             StringBuilder wsk = new StringBuilder();
             wsk.append(StringUtils.getInstance().getRandomChar()).append(System.currentTimeMillis()).append(".jpg");
             thumbnails.append(wsk);
-//        String fileName = "\\" + random + ".jpg";
+            // String fileName = "\\" + random + ".jpg";
             File file = new File(path, random);
             if (!file.exists()) {
                 FileUtil.mkdir(file);
-//                file.mkdir();
+                // file.mkdir();
             }
             try {
                 image.transferTo(file);
             } catch (Exception e) {
                 e.printStackTrace();
             }
-/*            String pornograp = Pornographic.CheckPornograp("D:\\" + random);
-            if (pornograp.equals("色情图片")) {
-                return "redirect:publish_product?error=不能使用色情图片";
-            }
-            if (!OCR.isOk2(pornograp)) {
-                return "redirect:publish_product?error=图片不能含有敏感文字";
-            }*/
-            //创建缩略图文件夹
-//            File thumbnailsFile = new File(thumbnails.toString());
-//            if (!thumbnailsFile.exists()) {
-//                FileUtil.mkdir(thumbnailsFile);
-////                thumbnailsFile.mkdir();
-//            }
+            /*
+             * String pornograp = Pornographic.CheckPornograp("D:\\" + random);
+             * if (pornograp.equals("色情图片")) {
+             * return "redirect:publish_product?error=不能使用色情图片";
+             * }
+             * if (!OCR.isOk2(pornograp)) {
+             * return "redirect:publish_product?error=图片不能含有敏感文字";
+             * }
+             */
+            // 创建缩略图文件夹
+            // File thumbnailsFile = new File(thumbnails.toString());
+            // if (!thumbnailsFile.exists()) {
+            // FileUtil.mkdir(thumbnailsFile);
+            //// thumbnailsFile.mkdir();
+            // }
             if (StringUtils.getInstance().thumbnails(path + random, thumbnails.toString())) {
                 save = "/toImage/thumbnails/" + wsk;
             } else {
                 return "redirect:publish_product.do?error=生成缩略图失败";
             }
-            //begin insert the shopInformation to the MySQL
+            // begin insert the shopInformation to the MySQL
             ShopInformation shopInformation = new ShopInformation();
             shopInformation.setName(name);
             shopInformation.setLevel(level);
@@ -645,14 +667,14 @@ public class UserController {
             shopInformation.setSort(sort);
             shopInformation.setQuantity(quantity);
             shopInformation.setModified(new Date());
-            shopInformation.setImage(random);//This is the other uniquely identifies
+            shopInformation.setImage(random);// This is the other uniquely identifies
             shopInformation.setThumbnails(save);
-//        shopInformation.setUid(4);
+            // shopInformation.setUid(4);
             int uid = (int) request.getSession().getAttribute("uid");
             shopInformation.setUid(uid);
             try {
                 int result = shopInformationService.insertSelective(shopInformation);
-                //插入失败？？？
+                // 插入失败？？？
                 if (result != 1) {
                     model.addAttribute("message", "请输入正确的格式!!!!!");
                     model.addAttribute("token", goodsToken);
@@ -667,25 +689,25 @@ public class UserController {
                 return "page/publish_product";
             }
             int sid = shopInformationService.selectIdByImage(random);// get the id which is belongs shopInformation
-            //将发布的商品的编号插入到用户的发布中
+            // 将发布的商品的编号插入到用户的发布中
             UserRelease userRelease = new UserRelease();
             userRelease.setModified(new Date());
             userRelease.setSid(sid);
             userRelease.setUid(uid);
             try {
                 int result = userReleaseService.insertSelective(userRelease);
-                //如果关联失败，删除对应的商品和商品图片
+                // 如果关联失败，删除对应的商品和商品图片
                 if (result != 1) {
-                    //if insert failure,transaction rollback.
+                    // if insert failure,transaction rollback.
                     shopInformationService.deleteByPrimaryKey(sid);
-//                shopPictureService.deleteByPrimaryKey(spid);
+                    // shopPictureService.deleteByPrimaryKey(spid);
                     model.addAttribute("token", goodsToken);
                     model.addAttribute("message", "请输入正确的格式!!!!!");
                     request.getSession().setAttribute("goodsToken", goodsToken);
                     return "page/publish_product";
                 }
             } catch (Exception e) {
-                //if insert failure,transaction rollback.
+                // if insert failure,transaction rollback.
                 shopInformationService.deleteByPrimaryKey(sid);
                 e.printStackTrace();
                 model.addAttribute("token", goodsToken);
@@ -703,7 +725,7 @@ public class UserController {
             model.addAttribute("sort", sb);
             model.addAttribute("action", 2);
             return "redirect:/my_publish_product_page.do";
-        } else if (action == 2) {//更新商品
+        } else if (action == 2) {// 更新商品
             ShopInformation shopInformation = new ShopInformation();
             shopInformation.setModified(new Date());
             shopInformation.setQuantity(quantity);
@@ -734,10 +756,10 @@ public class UserController {
         return "redirect:/my_publish_product_page.do";
     }
 
-    //从发布的商品直接跳转到修改商品
+    // 从发布的商品直接跳转到修改商品
     @RequestMapping(value = "/modifiedMyPublishProduct.do")
     public String modifiedMyPublishProduct(HttpServletRequest request, Model model,
-                                           @RequestParam int id) {
+            @RequestParam int id) {
         UserInformation userInformation = (UserInformation) request.getSession().getAttribute("userInformation");
         if (StringUtils.getInstance().isNullOrEmpty(userInformation)) {
             return "redirect:/login.do";
@@ -753,11 +775,11 @@ public class UserController {
         return "page/publish_product";
     }
 
-    //发表留言
+    // 发表留言
     @RequestMapping(value = "/insertShopContext.do")
     @ResponseBody
     public Map insertShopContext(@RequestParam int id, @RequestParam String context, @RequestParam String token,
-                                 HttpServletRequest request) {
+            HttpServletRequest request) {
         String goodsToken = (String) request.getSession().getAttribute("goodsToken");
         Map<String, String> map = new HashMap<>();
         map.put("result", "1");
@@ -792,10 +814,10 @@ public class UserController {
         return map;
     }
 
-    //下架商品
+    // 下架商品
     @RequestMapping(value = "/deleteShop.do")
     public String deleteShop(HttpServletRequest request, Model model, @RequestParam int id) {
-//        Map<String, Integer> map = new HashMap<>();
+        // Map<String, Integer> map = new HashMap<>();
         UserInformation userInformation = (UserInformation) request.getSession().getAttribute("userInformation");
         if (StringUtils.getInstance().isNullOrEmpty(userInformation)) {
             return "redirect:/login.do";
@@ -818,7 +840,7 @@ public class UserController {
         }
     }
 
-    //查看发布的所有商品总数
+    // 查看发布的所有商品总数
     @RequestMapping(value = "/getReleaseShopCounts.do")
     @ResponseBody
     public Map getReleaseShopCounts(HttpServletRequest request) {
@@ -832,7 +854,7 @@ public class UserController {
         return map;
     }
 
-    //查看我的发布的商品
+    // 查看我的发布的商品
     @RequestMapping(value = "/my_publish_product_page.do")
     public String getReleaseShop(HttpServletRequest request, Model model) {
         UserInformation userInformation = (UserInformation) request.getSession().getAttribute("userInformation");
@@ -845,12 +867,12 @@ public class UserController {
         List<ShopInformation> shopInformations = shopInformationService.selectUserReleaseByUid(uid);
         List<ShopInformationBean> list = new ArrayList<>();
         String stringBuffer;
-//            int i=0;
+        // int i=0;
         for (ShopInformation shopInformation : shopInformations) {
-//                if (i>=5){
-//                    break;
-//                }
-//                i++;
+            // if (i>=5){
+            // break;
+            // }
+            // i++;
             stringBuffer = getSort(shopInformation.getSort());
             ShopInformationBean shopInformationBean = new ShopInformationBean();
             shopInformationBean.setId(shopInformation.getId());
@@ -869,8 +891,7 @@ public class UserController {
         return "page/personal/my_publish_product_page";
     }
 
-    //更新商品信息
-
+    // 更新商品信息
 
     private String getSort(int sort) {
         StringBuilder sb = new StringBuilder();
@@ -887,7 +908,7 @@ public class UserController {
         return sb.toString();
     }
 
-    //查看用户收藏的货物的总数
+    // 查看用户收藏的货物的总数
     private int getCollectionCounts(int uid) {
         int counts;
         try {
@@ -899,7 +920,7 @@ public class UserController {
         return counts;
     }
 
-    //查看收藏，一次10个
+    // 查看收藏，一次10个
     private List<UserCollection> selectContectionByUid(int uid, int start) {
         try {
             return userCollectionService.selectByUid(uid, (start - 1) * 10);
@@ -911,7 +932,7 @@ public class UserController {
         }
     }
 
-    //查看用户发布的货物的总数
+    // 查看用户发布的货物的总数
     private int getReleaseCounts(int uid) {
         try {
             return userReleaseService.getCounts(uid);
@@ -921,7 +942,7 @@ public class UserController {
         }
     }
 
-    //查看发布的货物，一次10个
+    // 查看发布的货物，一次10个
     private List<UserRelease> selectReleaseByUid(int uid, int start) {
         try {
             return userReleaseService.selectByUid(uid, (start - 1) * 10);
@@ -933,7 +954,7 @@ public class UserController {
         }
     }
 
-    //查看用户购买到的物品的总数
+    // 查看用户购买到的物品的总数
     private int getBoughtShopCounts(int uid) {
         try {
             return boughtShopService.getCounts(uid);
@@ -943,7 +964,7 @@ public class UserController {
         }
     }
 
-    //查看用户的购买，10个
+    // 查看用户的购买，10个
     private List<BoughtShop> selectBoughtShopByUid(int uid, int start) {
         try {
             return boughtShopService.selectByUid(uid, (start - 1) * 10);
@@ -955,7 +976,7 @@ public class UserController {
         }
     }
 
-    //查看用户的求购总个数
+    // 查看用户的求购总个数
     private int getUserWantCounts(int uid) {
         try {
             return userWantService.getCounts(uid);
@@ -964,7 +985,7 @@ public class UserController {
         }
     }
 
-    //求购列表10
+    // 求购列表10
     private List<UserWant> selectUserWantByUid(int uid) {
         try {
             return userWantService.selectMineByUid(uid);
@@ -976,7 +997,7 @@ public class UserController {
         }
     }
 
-    //我的购物车总数
+    // 我的购物车总数
     private int getShopCarCounts(int uid) {
         try {
             return shopCarService.getCounts(uid);
@@ -986,18 +1007,18 @@ public class UserController {
         }
     }
 
-    //购物车列表  10
+    // 购物车列表 10
     private ShopCar selectShopCarByUid(int uid) {
         try {
             return shopCarService.selectByUid(uid);
         } catch (Exception e) {
             e.printStackTrace();
-//            List<ShopCar> list
+            // List<ShopCar> list
             return new ShopCar();
         }
     }
 
-    //查看订单总数
+    // 查看订单总数
     private int getOrderFormCounts(int uid) {
         try {
             return orderFormService.getCounts(uid);
@@ -1007,7 +1028,7 @@ public class UserController {
         }
     }
 
-    //订单列表 10个
+    // 订单列表 10个
     private List<OrderForm> selectOrderFormByUid(int uid, int start) {
         try {
             return orderFormService.selectByUid(uid, (start - 1) * 10);
@@ -1019,7 +1040,7 @@ public class UserController {
         }
     }
 
-    //订单中的商品
+    // 订单中的商品
     private List<GoodsOfOrderForm> selectGoodsOfOrderFormByOFid(int ofid) {
         try {
             return goodsOfOrderFormService.selectByOFid(ofid);
@@ -1031,7 +1052,7 @@ public class UserController {
         }
     }
 
-    //查看用户的状态
+    // 查看用户的状态
     private UserState selectUserStateByUid(int uid) {
         try {
             return userStateService.selectByUid(uid);
@@ -1041,7 +1062,7 @@ public class UserController {
         }
     }
 
-    //判断该手机号码及其密码是否一一对应
+    // 判断该手机号码及其密码是否一一对应
     private boolean getId(String phone, String password, HttpServletRequest request) {
         int uid = userInformationService.selectIdByPhone(phone);
         if (uid == 0 || StringUtils.getInstance().isNullOrEmpty(uid)) {
@@ -1056,24 +1077,24 @@ public class UserController {
         if (!password.equals(password2)) {
             return false;
         }
-        //如果密码账号对应正确，将userInformation存储到session中
+        // 如果密码账号对应正确，将userInformation存储到session中
         request.getSession().setAttribute("userInformation", userInformation);
         request.getSession().setAttribute("uid", uid);
         SaveSession.getInstance().save(phone, System.currentTimeMillis());
         return true;
     }
 
-    //获取最详细的分类，第三层
+    // 获取最详细的分类，第三层
     private Specific selectSpecificBySort(int sort) {
         return specificeService.selectByPrimaryKey(sort);
     }
 
-    //获得第二层分类
+    // 获得第二层分类
     private Classification selectClassificationByCid(int cid) {
         return classificationService.selectByPrimaryKey(cid);
     }
 
-    //获得第一层分类
+    // 获得第一层分类
     private AllKinds selectAllKindsByAid(int aid) {
         return allKindsService.selectByPrimaryKey(aid);
     }
@@ -1083,8 +1104,8 @@ public class UserController {
         userReleaseService.insertSelective(userRelease);
     }
 
-    //循环插入商品
-    //发布商品
+    // 循环插入商品
+    // 发布商品
     @RequestMapping(value = "/test")
     public String insertGoods() {
 
@@ -1107,20 +1128,20 @@ public class UserController {
             shopInformation.setModified(new Date());
             shopInformation.setLevel(level);
             shopInformation.setRemark("看上的请联系我，QQ：test，微信：test");
-//            double price = Math.random()*1000.00+1;
+            // double price = Math.random()*1000.00+1;
             shopInformation.setPrice(new BigDecimal(price));
             shopInformation.setSort(k);
             shopInformation.setQuantity(quantity);
             shopInformation.setImage("/image/QyBHYiMfYQ4XZFCqxEv0.jpg");
-//            int uid = random.nextInt(100)+1;
+            // int uid = random.nextInt(100)+1;
             shopInformation.setUid(uid);
-//            userRelease = new UserRelease();
-//            userRelease.setUid(uid);
-//            userRelease.setSid(j);
-//            userRelease.setModified(new Date());
-//            userRelease.setDisplay(1);
+            // userRelease = new UserRelease();
+            // userRelease.setUid(uid);
+            // userRelease.setSid(j);
+            // userRelease.setModified(new Date());
+            // userRelease.setDisplay(1);
             shopInformationService.updateByPrimaryKeySelective(shopInformation);
-//            userReleaseService.insertSelective(userRelease);
+            // userReleaseService.insertSelective(userRelease);
         }
         System.out.println("success");
         return "page/publish_product";

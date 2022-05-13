@@ -49,4 +49,8 @@ public class GoodsCarServiceImpl implements GoodsCarService {
     public List<GoodsCar> selectByUid(int scid) {
         return goodsCarMapper.selectByUid(scid);
     }
+    @Override
+    public int deletByUid(int scid) {
+        return goodsCarMapper.deletByUid(scid);
+    }
 }
