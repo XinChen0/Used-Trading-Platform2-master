@@ -1,15 +1,15 @@
 /**
  * Created by alone on 2017/5/15.
  */
-var pingguo = createObject(1, '苹果');
-var sanxing = createObject(2, '三星');
-var xiaomi = createObject(3, '小米');
-var huawei = createObject(4, '华为');
-var zhongxing = createObject(5, '中兴');
-var lianxiang = createObject(6, '联想');
-var meizhu = createObject(7, '魅族');
-var qitas = createObject(8, '其他');
-var erjis = createObject(9, '耳机');
+var pingguo = createObject(1, '11');
+var sanxing = createObject(2, '22');
+var xiaomi = createObject(3, '33');
+var huawei = createObject(4, '44');
+var zhongxing = createObject(5, '55');
+var lianxiang = createObject(6, '66');
+var meizhu = createObject(7, '77');
+var qitas = createObject(8, '88');
+var erjis = createObject(9, '99');
 var shouji = new Object();
 shouji.name = '手机';
 shouji.content = [pingguo, sanxing, xiaomi, huawei, zhongxing, lianxiang, meizhu, qitas, erjis];
