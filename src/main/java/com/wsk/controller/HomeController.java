@@ -118,16 +118,16 @@ public class HomeController {
     //通过分类的第三层id获取全名
     private String getSortName(int sort) {
         StringBuilder stringBuffer = new StringBuilder();
-        Specific specific = selectSpecificBySort(sort);
-        int cid = specific.getCid();
-        Classification classification = selectClassificationByCid(cid);
+        // Specific specific = selectSpecificBySort(sort);
+        // int cid = specific.getCid();
+        Classification classification = selectClassificationByCid(sort);
         int aid = classification.getAid();
         AllKinds allKinds = selectAllKindsByAid(aid);
         stringBuffer.append(allKinds.getName());
         stringBuffer.append("-");
         stringBuffer.append(classification.getName());
-        stringBuffer.append("-");
-        stringBuffer.append(specific.getName());
+        // stringBuffer.append("-");
+        // stringBuffer.append(specific.getName());
 //        System.out.println(sort);
         return stringBuffer.toString();
     }
