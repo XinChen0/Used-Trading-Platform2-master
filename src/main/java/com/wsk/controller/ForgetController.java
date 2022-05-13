@@ -27,20 +27,21 @@ public class ForgetController {
     @Resource
     private UserInformationService userInformationService;
 
-    @RequestMapping(value = "checkCode.do", method = {RequestMethod.POST, RequestMethod.GET})
+    @RequestMapping(value = "checkCode.do", method = { RequestMethod.POST, RequestMethod.GET })
     public Map checkPhone(HttpServletRequest request, Model model,
-                          @RequestParam String code, @RequestParam String token) {
+            @RequestParam String code, @RequestParam String token) {
         Map<String, Integer> map = new HashMap<>();
         String name = request.getParameter("name");
         if (!StringUtils.getInstance().isNullOrEmpty(name)) {
             request.getSession().setAttribute("name", name);
         }
         String checkCodeToken = (String) request.getSession().getAttribute("token");
-//        if (StringUtils.getInstance().isNullOrEmpty(checkCodeToken) || !checkCodeToken.equals(token)) {
-//            map.put("result", 0);
-//            return map;
-//        }
-        //验证码错误
+        // if (StringUtils.getInstance().isNullOrEmpty(checkCodeToken) ||
+        // !checkCodeToken.equals(token)) {
+        // map.put("result", 0);
+        // return map;
+        // }
+        // 验证码错误
         if (!checkCodePhone(code, request)) {
             map.put("result", 0);
             return map;
@@ -49,11 +50,11 @@ public class ForgetController {
         return map;
     }
 
-    //更新密码
+    // 更新密码
     @RequestMapping("updatePassword.do")
     public BaseResponse updatePassword(HttpServletRequest request, Model model,
-                                       @RequestParam String password, @RequestParam String token) {
-        //防止重复提交
+            @RequestParam String password, @RequestParam String token) {
+        // 防止重复提交
         String updatePasswordToken = (String) request.getSession().getAttribute("token");
         if (StringUtils.getInstance().isNullOrEmpty(updatePasswordToken) || !updatePasswordToken.equals(token)) {
             return BaseResponse.fail();
@@ -82,7 +83,7 @@ public class ForgetController {
         } catch (Exception e) {
             return BaseResponse.fail();
         }
-        //更新失败
+        // 更新失败
         if (result != 1) {
             return BaseResponse.fail();
         }
@@ -91,9 +92,10 @@ public class ForgetController {
         return BaseResponse.success();
     }
 
-    //check the phone`s code
+    // check the phone`s code
     private boolean checkCodePhone(String codePhone, HttpServletRequest request) {
-        String trueCodePhone = "12251103";
+        String trueCodePhone = (String) request.getSession().getAttribute("codePhone");
+        ;
         return codePhone.equals(trueCodePhone);
     }
 }
